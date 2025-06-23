@@ -2,24 +2,23 @@ package com.moecodes.xperienceserver.domain;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
-public class User {
+public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    private String username;
     private String email;
     private String password;
     private int xp;
     private int health;
 
-    @OneToMany(mappedBy = "user")
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "player")
+    private List<Task> tasks = new ArrayList<>();
 
 
     public Long getId() {
@@ -30,12 +29,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getEmail() {
@@ -82,7 +81,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
+                ", userName='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", xp=" + xp +
@@ -95,8 +94,8 @@ public class User {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
-        return Objects.equals(id, user.id);
+        Player player = (Player) o;
+        return Objects.equals(id, player.id);
     }
 
     @Override

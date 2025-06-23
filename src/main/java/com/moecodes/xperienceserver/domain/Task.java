@@ -21,7 +21,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Player player = new Player();
 
 
     public Long getId() {
@@ -80,12 +80,12 @@ public class Task {
         this.healthPenalty = healthPenalty;
     }
 
-    public User getUser() {
-        return user;
+    public Player getUser() {
+        return player;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Player player) {
+        this.player = player;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class Task {
                 ", completed=" + completed +
                 ", difficulty=" + difficulty +
                 ", healthPenalty=" + healthPenalty +
-                ", user=" + user +
+                ", user=" + player +
                 '}';
     }
 
