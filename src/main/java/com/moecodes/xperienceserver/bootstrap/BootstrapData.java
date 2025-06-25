@@ -3,7 +3,7 @@ package com.moecodes.xperienceserver.bootstrap;
 import com.moecodes.xperienceserver.domain.Task;
 import com.moecodes.xperienceserver.domain.Player;
 import com.moecodes.xperienceserver.repositories.TaskRepository;
-import com.moecodes.xperienceserver.repositories.UserRepository;
+import com.moecodes.xperienceserver.repositories.PlayerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 public class BootstrapData implements CommandLineRunner {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
+    private final PlayerRepository playerRepository;
 
-    public BootstrapData(TaskRepository taskRepository, UserRepository userRepository) {
+    public BootstrapData(TaskRepository taskRepository, PlayerRepository playerRepository) {
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
+        this.playerRepository = playerRepository;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BootstrapData implements CommandLineRunner {
         dishes.setTitle("Do the dishes");
         dishes.setDescription("Finish the dishes  today!");
 
-        Player moeSaved = userRepository.save(moe);
+        Player moeSaved = playerRepository.save(moe);
         laundry.setUser(moeSaved);
         dishes.setUser(moeSaved);
 
@@ -46,7 +46,7 @@ public class BootstrapData implements CommandLineRunner {
         moeSaved.getTasks().add(dishesSaved);
 
         System.out.println("In Bootstrap");
-        System.out.println("User count: " + userRepository.count());
+        System.out.println("User count: " + playerRepository.count());
         System.out.println("Task count: " + taskRepository.count());
     }
 }
