@@ -19,7 +19,6 @@ public class SecurityConfig {
         http.authorizeHttpRequests((request) -> request
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/csrf-token").permitAll()
                 .anyRequest().authenticated());
         http.httpBasic(Customizer.withDefaults());
         http.formLogin(Customizer.withDefaults());
