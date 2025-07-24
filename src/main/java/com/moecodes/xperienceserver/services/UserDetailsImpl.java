@@ -1,13 +1,12 @@
-package com.moecodes.xperienceserver.security.services;
+package com.moecodes.xperienceserver.services;
 
-import com.moecodes.xperienceserver.security.modules.User;
+import com.moecodes.xperienceserver.modules.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
-import java.security.cert.CertificateRevokedException;
 import java.util.Collection;
 import java.util.List;
 

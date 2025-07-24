@@ -1,4 +1,4 @@
-package com.moecodes.xperienceserver.security.modules;
+package com.moecodes.xperienceserver.modules;
 
 import jakarta.persistence.*;
 import lombok.Data;

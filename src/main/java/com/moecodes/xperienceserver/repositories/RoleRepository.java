@@ -1,6 +1,6 @@
-package com.moecodes.xperienceserver.security.repositories;
+package com.moecodes.xperienceserver.repositories;
 
-import com.moecodes.xperienceserver.security.modules.Role;
+import com.moecodes.xperienceserver.modules.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package com.moecodes.xperienceserver.security.services;
+package com.moecodes.xperienceserver.services;
 
-import com.moecodes.xperienceserver.security.modules.User;
-import com.moecodes.xperienceserver.security.repositories.UserRepository;
+import com.moecodes.xperienceserver.modules.User;
+import com.moecodes.xperienceserver.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
