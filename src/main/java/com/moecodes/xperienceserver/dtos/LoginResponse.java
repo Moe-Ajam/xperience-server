@@ -1,4 +1,4 @@
-package com.moecodes.xperienceserver.payloads;
+package com.moecodes.xperienceserver.dtos;
 
 import lombok.*;
 
