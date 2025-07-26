@@ -1,4 +1,4 @@
-package com.moecodes.xperienceserver.filters;
+package com.moecodes.xperienceserver.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

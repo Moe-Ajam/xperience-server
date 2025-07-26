@@ -1,4 +1,4 @@
-package com.moecodes.xperienceserver.utils;
+package com.moecodes.xperienceserver.security.utils;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

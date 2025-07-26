@@ -1,4 +1,4 @@
-package com.moecodes.xperienceserver.dtos;
+package com.moecodes.xperienceserver.security.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

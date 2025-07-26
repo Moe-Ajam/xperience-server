@@ -1,7 +1,7 @@
-package com.moecodes.xperienceserver.configs;
+package com.moecodes.xperienceserver.security.configs;
 
-import com.moecodes.xperienceserver.filters.AuthEntryPointJwt;
-import com.moecodes.xperienceserver.filters.AuthTokenFilter;
+import com.moecodes.xperienceserver.security.filters.AuthEntryPointJwt;
+import com.moecodes.xperienceserver.security.filters.AuthTokenFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

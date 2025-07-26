@@ -1,14 +1,12 @@
-package com.moecodes.xperienceserver.controllers;
+package com.moecodes.xperienceserver.security.controllers;
 
-import com.moecodes.xperienceserver.dtos.LoginRequest;
-import com.moecodes.xperienceserver.dtos.LoginResponse;
-import com.moecodes.xperienceserver.dtos.MessageResponse;
-import com.moecodes.xperienceserver.dtos.SignupRequest;
-import com.moecodes.xperienceserver.modules.Role;
-import com.moecodes.xperienceserver.modules.User;
-import com.moecodes.xperienceserver.repositories.RoleRepository;
-import com.moecodes.xperienceserver.repositories.UserRepository;
-import com.moecodes.xperienceserver.utils.JwtUtils;
+import com.moecodes.xperienceserver.security.dtos.*;
+import com.moecodes.xperienceserver.security.modules.Role;
+import com.moecodes.xperienceserver.security.modules.User;
+import com.moecodes.xperienceserver.security.repositories.RoleRepository;
+import com.moecodes.xperienceserver.security.repositories.UserRepository;
+import com.moecodes.xperienceserver.security.services.UserService;
+import com.moecodes.xperienceserver.security.utils.JwtUtils;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,13 +15,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -38,6 +34,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @PostMapping("/public/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -102,7 +99,34 @@ public class AuthController {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         userRepository.save(user);
-        return ResponseEntity.ok("User has been registered successfully!");
+        return ResponseEntity.ok(new MessageResponse("User has been registered successfully!"));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserDetails(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = userService.findByUsername(userDetails.getUsername());
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        UserInfoResponse response = new UserInfoResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getEnabled(),
+                roles
+        );
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/username")
+    public ResponseEntity<?> getUserName(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        UsernameResponse response = new UsernameResponse(username);
+
+        return ResponseEntity.ok(response);
     }
 }
 

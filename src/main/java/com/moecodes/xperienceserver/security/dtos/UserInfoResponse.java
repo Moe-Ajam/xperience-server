@@ -1,5 +1,6 @@
-package com.moecodes.xperienceserver.dtos;
+package com.moecodes.xperienceserver.security.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class UserInfoResponse {
     private Long id;
     private String username;

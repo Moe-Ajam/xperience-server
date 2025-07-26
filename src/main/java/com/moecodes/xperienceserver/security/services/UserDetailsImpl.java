@@ -1,6 +1,6 @@
-package com.moecodes.xperienceserver.services;
+package com.moecodes.xperienceserver.security.services;
 
-import com.moecodes.xperienceserver.modules.User;
+import com.moecodes.xperienceserver.security.modules.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

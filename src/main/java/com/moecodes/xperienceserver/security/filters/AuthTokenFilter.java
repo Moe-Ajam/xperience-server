@@ -1,6 +1,6 @@
-package com.moecodes.xperienceserver.filters;
+package com.moecodes.xperienceserver.security.filters;
 
-import com.moecodes.xperienceserver.utils.JwtUtils;
+import com.moecodes.xperienceserver.security.utils.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
