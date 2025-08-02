@@ -15,12 +15,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
+
+
 
     private final AuthEntryPointJwt unauthorizedHandler;
 
@@ -32,6 +40,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.authorizeHttpRequests((request) -> request
                 .requestMatchers("/api/auth/public/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -44,6 +53,25 @@ public class SecurityConfig {
         http.httpBasic(Customizer.withDefaults());
         http.formLogin(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        // Allow specific origins
+        corsConfig.setAllowedOrigins(List.of("http://localhost:5173"));
+
+        // Allow specific HTTP methods
+        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        // Allow specific headers
+        corsConfig.setAllowedHeaders(List.of("*"));
+        // Allow credentials (cookies, authorization headers)
+        corsConfig.setAllowCredentials(true);
+        corsConfig.setMaxAge(3600L);
+        // Define allowed paths (for all paths use "/**")
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig); // Apply to all endpoints
+        return source;
     }
 
     @Bean
