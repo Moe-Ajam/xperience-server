@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserTasksDto {
+public class TasksDto {
+    private Long id;
     private String title;
     private String description;
+    private Boolean completed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
