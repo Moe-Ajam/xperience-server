@@ -1,14 +1,17 @@
 package com.moecodes.xperienceserver.services;
 
-import com.moecodes.xperienceserver.dtos.TasksDto;
+import com.moecodes.xperienceserver.dtos.AddTaskRequestDto;
+import com.moecodes.xperienceserver.dtos.TaskDto;
 import com.moecodes.xperienceserver.modules.Task;
 import com.moecodes.xperienceserver.repositories.TaskRepository;
 import com.moecodes.xperienceserver.security.modules.User;
 import com.moecodes.xperienceserver.security.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -17,29 +20,45 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    public List<TasksDto> getTasksForUser(String username) {
+    public List<TaskDto> getTasksForUser(String username) {
         User user = userRepository.findByUsername(username).orElseThrow();
         List<Task> tasks = taskRepository.findTasksByUserId(user.getId());
-        return tasks.stream().map(this::convertToUserTasksDto).toList();
+        return tasks.stream().map(this::convertToTaskDto).toList();
     }
 
-    private TasksDto convertToUserTasksDto(Task task) {
-        TasksDto tasksDto = new TasksDto();
-        tasksDto.setId(task.getId());
-        tasksDto.setTitle(task.getTitle());
-        tasksDto.setDescription(task.getDescription());
-        tasksDto.setCompleted(task.getCompleted());
-        tasksDto.setCreatedAt(task.getCreatedAt());
-        tasksDto.setUpdatedAt(task.getUpdatedAt());
-        return tasksDto;
+    private TaskDto convertToTaskDto(Task task) {
+        TaskDto taskDto = new TaskDto();
+        taskDto.setId(task.getId());
+        taskDto.setTitle(task.getTitle());
+        taskDto.setDescription(task.getDescription());
+        taskDto.setCompleted(task.getCompleted());
+        taskDto.setCreatedAt(task.getCreatedAt());
+        taskDto.setUpdatedAt(task.getUpdatedAt());
+        return taskDto;
     }
 
-    public TasksDto toggleTaskCompleted(Long id) {
+    public TaskDto toggleTaskCompleted(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Task with id " + id + " not found"));
         task.setCompleted(!task.getCompleted());
         taskRepository.save(task);
-        return convertToUserTasksDto(task);
+        return convertToTaskDto(task);
+    }
+
+    @Transactional
+    public TaskDto addTask(AddTaskRequestDto requestDto, String username) {
+        Task task = new Task();
+        task.setTitle(requestDto.getTitle());
+        task.setDescription(requestDto.getDescription());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow();
+        task.setUser(user);
+        task.setCompleted(false);
+        task.setCreatedAt(LocalDateTime.now());
+        task.setUpdatedAt(LocalDateTime.now());
+
+        Task saved = taskRepository.save(task);
+        return convertToTaskDto(saved);
     }
 
 
