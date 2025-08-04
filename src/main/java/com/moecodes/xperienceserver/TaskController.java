@@ -4,11 +4,13 @@ import com.moecodes.xperienceserver.dtos.AddTaskRequestDto;
 import com.moecodes.xperienceserver.dtos.TaskDto;
 import com.moecodes.xperienceserver.services.TaskService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -33,6 +35,16 @@ public class TaskController {
     @PostMapping("/tasks")
     public ResponseEntity<?> addTask(@AuthenticationPrincipal UserDetails userDetails, @RequestBody AddTaskRequestDto requestDto) {
         TaskDto savedTask = taskService.addTask(requestDto, userDetails.getUsername());
-        return ResponseEntity.ok(savedTask);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
+    }
+
+    @DeleteMapping("/tasks/{id}")
+    public ResponseEntity<?> deleteTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
+        try {
+            taskService.deleteTask(id, userDetails.getUsername());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
