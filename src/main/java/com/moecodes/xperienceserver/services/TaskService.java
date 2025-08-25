@@ -2,6 +2,7 @@ package com.moecodes.xperienceserver.services;
 
 import com.moecodes.xperienceserver.dtos.AddTaskRequestDto;
 import com.moecodes.xperienceserver.dtos.TaskDto;
+import com.moecodes.xperienceserver.dtos.UpdateTaskDto;
 import com.moecodes.xperienceserver.exceptions.ResourceNotFoundException;
 import com.moecodes.xperienceserver.modules.Task;
 import com.moecodes.xperienceserver.repositories.TaskRepository;
@@ -12,7 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,4 +77,21 @@ public class TaskService {
 
     }
 
+    @Transactional
+    public TaskDto updateTask(Long taskId, UpdateTaskDto requestDto, String username) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task with id " + taskId + "not found"));
+
+        if (!task.getUser().getUsername().equals(username)) {
+            throw new AccessDeniedException("You don't own this task");
+        }
+
+        task.setTitle(requestDto.getTitle());
+        if (!requestDto.getDescription().trim().isEmpty()) {
+            task.setDescription(requestDto.getDescription());
+        }
+
+        Task saved = taskRepository.save(task);
+        return convertToTaskDto(saved);
+    }
 }

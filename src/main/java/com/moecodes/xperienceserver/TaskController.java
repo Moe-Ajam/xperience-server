@@ -2,6 +2,7 @@ package com.moecodes.xperienceserver;
 
 import com.moecodes.xperienceserver.dtos.AddTaskRequestDto;
 import com.moecodes.xperienceserver.dtos.TaskDto;
+import com.moecodes.xperienceserver.dtos.UpdateTaskDto;
 import com.moecodes.xperienceserver.services.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -40,11 +40,15 @@ public class TaskController {
 
     @DeleteMapping("/tasks/{id}")
     public ResponseEntity<?> deleteTask(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id) {
-        try {
-            taskService.deleteTask(id, userDetails.getUsername());
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
-        }
+        taskService.deleteTask(id, userDetails.getUsername());
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/tasks/{id}")
+    public ResponseEntity<?> updateTask(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long id, @RequestBody UpdateTaskDto requestDto) {
+        TaskDto savedTask = taskService.updateTask(id, requestDto, userDetails.getUsername());
+
+        return ResponseEntity.ok(savedTask);
     }
 }
